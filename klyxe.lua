@@ -1,8 +1,10 @@
--- Klyxe Hub Final Customizer (Black/Red Theme, No Donation/Webhook, Misc to Egg ESP)
+-- Klyxe Hub Finalized Wrapper (Black/Red Theme, No Donation/Webhook, Misc to Egg ESP, Custom Minimize Logo)
 task.spawn(function()
     local CoreGui = game:GetService("CoreGui")
-    local Players = game.Players
-    local LocalPlayer = Players.LocalPlayer
+    local LocalPlayer = game.Players.LocalPlayer
+
+    -- Gumamit ako ng default Roblox asset ID para sa Klyxe Hub minimized logo
+    local klyxeLogo = "rbxassetid://6023426915"
 
     local function applyCustomizations(parent)
         for _, v in ipairs(parent:GetDescendants()) do
@@ -26,6 +28,13 @@ task.spawn(function()
                         else
                             v.Visible = false
                         end
+                    end
+                end
+
+                -- Baguhin ang pinaliit na minimize icon kung nakita ang lkz/loader image
+                if v:IsA("ImageLabel") or v:IsA("ImageButton") then
+                    if v.Name:find("Minimize") or v.Name:find("Icon") or v.Image == "rbxassetid://7733965558" then
+                        v.Image = klyxeLogo
                     end
                 end
 
