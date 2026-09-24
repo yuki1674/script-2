@@ -200,3 +200,5 @@ CreateScriptItem("NIGHT HUB", "https://raw.githubusercontent.com/WhiteX1208/Scri
 CreateScriptItem("SAEGRR", "https://raw.githubusercontent.com/swaggayoung581-sudo/SAE-COMMUNITYYYYY/refs/heads/main/SAEGRR_HUB_BLACK_RED_TWO_MENUS_AUTO_STEAL.lua.txt")
 CreateScriptItem("CHILI", "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua")
 CreateScriptItem("DECODE", "https://raw.githubusercontent.com/ItzYumi/Decode/refs/heads/main/DE%3ACODE.lua")
+CreateScriptItem("TSUO", "https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/stealanegg")
+CreateScriptItem("LIMBO", "https://limbohub.my.id/loader.lua")
