@@ -192,12 +192,12 @@ local function CreateScriptItem(scriptName, scriptUrl)
     end)
 end
 
--- Listahan ng 15 Scripts
+-- Listahan ng 16 Scripts
 CreateScriptItem("LKZ", "https://api.luarmor.net/files/v4/loaders/65bf3459d87ba3ac46350e154b640929.lua")
 CreateScriptItem("GLINT", "https://flowauth.net/v1/loaders/6824c37a4078d7d311677732e231edaa.lua")
 CreateScriptItem("LEVON", "https://pastefy.app/nasHhfko/raw")
 CreateScriptItem("PS HOP", "https://raw.githubusercontent.com/GlazeScripts/Private-Server-Finder/refs/heads/main/Glazehub.lua")
-CreateScriptItem("SENA", "https://raw.githubusercontent.com/senarblx/sena/refs/heads/main/senav3go")
+CreateScriptItem("SENA", "https://senahub.xyz/raw/loader")
 CreateScriptItem("FOX", "https://raw.githubusercontent.com/caomod2077/Script/refs/heads/main/Fn-stealanegg.lua")
 CreateScriptItem("BLXY", "https://flowauth.net/v1/loaders/69d3463240384f3a73fbe32c178093a2.lua")
 CreateScriptItem("LENNON V4", "https://api.luarmor.net/files/v4/loaders/4595fe31a5f7a8b4f4dd7071f3119ef7.lua")
@@ -208,3 +208,4 @@ CreateScriptItem("DECODE", "https://raw.githubusercontent.com/ItzYumi/Decode/ref
 CreateScriptItem("TSUO", "https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/stealanegg")
 CreateScriptItem("LIMBO", "https://limbohub.my.id/loader.lua")
 CreateScriptItem("MIRANDAV4", "https://raw.githubusercontent.com/miirandahub/loader/refs/heads/main/mirandaafk.lua")
+CreateScriptItem("SHADER", "https://raw.githubusercontent.com/randomstring0/pshade-ultimate/refs/heads/main/src/cd.lua")
