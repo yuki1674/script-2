@@ -262,7 +262,7 @@ end
 AddItem(ScriptsTab, "LKZ", "https://api.luarmor.net/files/v4/loaders/65bf3459d87ba3ac46350e154b640929.lua")
 AddItem(ScriptsTab, "GLINT", "https://flowauth.net/v1/loaders/6824c37a4078d7d311677732e231edaa.lua")
 AddItem(ScriptsTab, "LEVON", "https://pastefy.app/nasHhfko/raw")
-AddItem(ScriptsTab, "SENA", "https://raw.githubusercontent.com/senarblx/sena/refs/heads/main/senav3go")
+AddItem(ScriptsTab, "SENA", "https://senahub.xyz/raw/loader")
 AddItem(ScriptsTab, "FOX", "https://raw.githubusercontent.com/caomod2077/Script/refs/heads/main/Fn-stealanegg.lua")
 AddItem(ScriptsTab, "BLXY", "https://flowauth.net/v1/loaders/69d3463240384f3a73fbe32c178093a2.lua")
 AddItem(ScriptsTab, "LENNON V4", "https://api.luarmor.net/files/v4/loaders/4595fe31a5f7a8b4f4dd7071f3119ef7.lua")
