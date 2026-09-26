@@ -1,4 +1,77 @@
--- KLYXE HUB | Owner: clyecon (Sidebar Style with Tabs, Shader, PS Finder, Key Tab & Settings)
+-- KLYXE HUB | Owner: clyecon (Loading Screen, Minimize to Small Box, Sidebar Tabs)
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- 1. Loading Screen (Lalabas muna ng mga 5 segundo)
+local LoadGui = Instance.new("ScreenGui")
+LoadGui.Parent = CoreGui or PlayerGui
+LoadGui.Name = "KlyxeLoading"
+
+local LoadFrame = Instance.new("Frame")
+LoadFrame.Parent = LoadGui
+LoadFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+LoadFrame.Position = UDim2.new(0.5, -125, 0.5, -80)
+LoadFrame.Size = UDim2.new(0, 250, 0, 160)
+LoadFrame.Active = true
+LoadFrame.Draggable = true
+
+local LoadCorner = Instance.new("UICorner")
+LoadCorner.CornerRadius = UDim.new(0, 10)
+LoadCorner.Parent = LoadFrame
+
+local LoadStroke = Instance.new("UIStroke")
+LoadStroke.Parent = LoadFrame
+LoadStroke.Color = Color3.fromRGB(220, 20, 60)
+LoadStroke.Thickness = 2
+
+-- Logo Image sa Loading Screen (Galing sa ibinigay mong larawan)
+local LogoImage = Instance.new("ImageLabel")
+LogoImage.Parent = LoadFrame
+LogoImage.BackgroundTransparency = 1
+LogoImage.Position = UDim2.new(0.5, -75, 0.15, 0)
+LogoImage.Size = UDim2.new(0, 150, 0, 70)
+LogoImage.Image = "rbxassetid://18512314545" -- Default placeholder asset id para sa logo
+LogoImage.ScaleType = Enum.ScaleType.Fit
+
+local LoadText = Instance.new("TextLabel")
+LoadText.Parent = LoadFrame
+LoadText.BackgroundTransparency = 1
+LoadText.Position = UDim2.new(0, 10, 0.65, 0)
+LoadText.Size = UDim2.new(1, -20, 0, 30)
+LoadText.Font = Enum.Font.SourceSansBold
+LoadText.Text = "Loading Klyxe Hub..."
+LoadText.TextColor3 = Color3.fromRGB(255, 255, 255)
+LoadText.TextSize = 13
+
+local BarBg = Instance.new("Frame")
+BarBg.Parent = LoadFrame
+BarBg.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+BarBg.Position = UDim2.new(0.1, 0, 0.85, 0)
+BarBg.Size = UDim2.new(0.8, 0, 0, 8)
+
+local BarBgCorner = Instance.new("UICorner")
+BarBgCorner.CornerRadius = UDim.new(1, 0)
+BarBgCorner.Parent = BarBg
+
+local BarFill = Instance.new("Frame")
+BarFill.Parent = BarBg
+BarFill.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
+BarFill.Size = UDim2.new(0, 0, 1, 0)
+
+local BarFillCorner = Instance.new("UICorner")
+BarFillCorner.CornerRadius = UDim.new(1, 0)
+BarFillCorner.Parent = BarFill
+
+-- Progress animation para sa 5 seconds
+local tweenService = game:GetService("TweenService")
+tweenService:Create(BarFill, TweenInfo.new(5, Enum.EasingStyle.Linear), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+
+task.wait(5)
+LoadGui:Destroy()
+
+-- 2. Mismong Main GUI ng Klyxe Hub
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local TitleLabel = Instance.new("TextLabel")
@@ -8,6 +81,29 @@ local CloseBtn = Instance.new("TextButton")
 local MinimizeBtn = Instance.new("TextButton")
 local isMinimized = false
 
+-- Maliit na Box kapag naka-minimize
+local SmallBox = Instance.new("TextButton")
+SmallBox.Parent = ScreenGui
+SmallBox.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+SmallBox.Position = UDim2.new(0.5, -30, 0.1, 0)
+SmallBox.Size = UDim2.new(0, 60, 0, 30)
+SmallBox.Font = Enum.Font.SourceSansBold
+SmallBox.Text = "KLYXE"
+SmallBox.TextColor3 = Color3.fromRGB(220, 20, 60)
+SmallBox.TextSize = 11
+SmallBox.Visible = false
+SmallBox.Active = true
+SmallBox.Draggable = true
+
+local SmallCorner = Instance.new("UICorner")
+SmallCorner.CornerRadius = UDim.new(0, 6)
+SmallCorner.Parent = SmallBox
+
+local SmallStroke = Instance.new("UIStroke")
+SmallStroke.Parent = SmallBox
+SmallStroke.Color = Color3.fromRGB(220, 20, 60)
+SmallStroke.Thickness = 2
+
 -- Sidebar Frame (Kaliwa)
 local Sidebar = Instance.new("Frame")
 local SidebarLayout = Instance.new("UIListLayout")
@@ -16,7 +112,7 @@ local SidebarLayout = Instance.new("UIListLayout")
 local ContentContainer = Instance.new("Frame")
 
 -- Parent Setup
-ScreenGui.Parent = game:GetService("CoreGui") or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.Parent = CoreGui or PlayerGui
 ScreenGui.Name = "KlyxeHub"
 
 -- Main Window
@@ -32,7 +128,7 @@ UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
 UIStroke.Parent = MainFrame
-UIStroke.Color = Color3.fromRGB(220, 20, 60) -- Red Outline
+UIStroke.Color = Color3.fromRGB(220, 20, 60)
 UIStroke.Thickness = 2
 
 -- Title Label
@@ -66,7 +162,7 @@ CloseBtn.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
 
--- Minimize ("-") Circle Button
+-- Minimize ("-") Button
 MinimizeBtn.Name = "MinimizeButton"
 MinimizeBtn.Parent = MainFrame
 MinimizeBtn.Position = UDim2.new(1, -52, 0, 8)
@@ -102,7 +198,7 @@ ContentContainer.BackgroundTransparency = 1
 ContentContainer.Position = UDim2.new(0, 125, 0, 38)
 ContentContainer.Size = UDim2.new(1, -135, 1, -75)
 
--- Function para gumawa ng magkaibang Pages/Tabs
+-- Function para sa paggawa ng Tabs
 local Pages = {}
 local function CreateTab(tabName)
     local TabBtn = Instance.new("TextButton")
@@ -152,7 +248,7 @@ local function CreateTab(tabName)
     return ScrollFrame
 end
 
--- Gumawa ng mga Tabs (Kasama na ang "Settings" Tab)
+-- Tabs
 local ScriptsTab = CreateTab("Scripts")
 local KeyTab = CreateTab("Key")
 local FinderTab = CreateTab("PS Finder")
@@ -183,20 +279,17 @@ DiscButton.MouseButton1Click:Connect(function()
     DiscButton.Text = "COPY DISCORD LINK"
 end)
 
--- Minimize Functionality
-MinimizeBtn.MouseButton1Click:Connect(function()
+-- Minimize & Unminimize Logic (Magiging maliit na box)
+local function ToggleMinimize()
     isMinimized = not isMinimized
-    Sidebar.Visible = not isMinimized
-    ContentContainer.Visible = not isMinimized
-    DiscButton.Visible = not isMinimized
-    if isMinimized then
-        MainFrame.Size = UDim2.new(0, 420, 0, 38)
-    else
-        MainFrame.Size = UDim2.new(0, 420, 0, 270)
-    end
-end)
+    MainFrame.Visible = not isMinimized
+    SmallBox.Visible = isMinimized
+end
 
--- Function para sa paggawa ng Script Item sa loob ng tab
+MinimizeBtn.MouseButton1Click:Connect(ToggleMinimize)
+SmallBox.MouseButton1Click:Connect(ToggleMinimize)
+
+-- Function para sa paggawa ng Items sa loob ng tab
 local function AddItem(targetTab, scriptName, scriptUrl, badgeText)
     local ItemFrame = Instance.new("Frame")
     local ItemCorner = Instance.new("UICorner")
@@ -258,7 +351,7 @@ local function AddItem(targetTab, scriptName, scriptUrl, badgeText)
     end)
 end
 
--- 1. Mga nakalagay sa "Scripts" Tab
+-- Scripts Tab Items
 AddItem(ScriptsTab, "LKZ", "https://api.luarmor.net/files/v4/loaders/65bf3459d87ba3ac46350e154b640929.lua")
 AddItem(ScriptsTab, "GLINT", "https://flowauth.net/v1/loaders/6824c37a4078d7d311677732e231edaa.lua")
 AddItem(ScriptsTab, "LEVON", "https://pastefy.app/nasHhfko/raw")
@@ -288,7 +381,7 @@ AddItem(ScriptsTab, "NASI RENDANG", "https://raw.githubusercontent.com/JualNasiR
 AddItem(ScriptsTab, "VOID SHELL", "https://raw.githubusercontent.com/VoidShell-null/VoidShell-Hub/refs/heads/main/Scripts/StealAnEgg.luau")
 AddItem(ScriptsTab, "SOLVEX", "https://raw.githubusercontent.com/Solvexxxx/Scripts/refs/heads/main/SolvexGUI_SAE.lua")
 
--- 2. Mga nakalagay sa "Key" Tab
+-- Key Tab Items
 AddItem(KeyTab, "OMG HUB", "https://raw.githubusercontent.com/Omgshit/Scripts/main/MainLoader.lua", "KEY")
 AddItem(KeyTab, "AJJANS", "https://api.luarmor.net/files/v4/loaders/36107afd3107e8d841f9d1a69e2465d4.lua", "KEY")
 AddItem(KeyTab, "ANGRY HUB", "https://gist.githubusercontent.com/angeryy-tvy/6a9ce750ddf5860230196ac468868fdb/raw/Steal-An-Egg-Vxeze", "KEY")
@@ -308,14 +401,14 @@ AddItem(KeyTab, "BF", "https://raw.githubusercontent.com/hanniii1/Loader/refs/he
 AddItem(KeyTab, "ZN", "https://zeroinhub.com/api/script", "KEY")
 AddItem(KeyTab, "SPEED HUB", "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", "KEY")
 
--- 3. Mga nakalagay sa "PS Finder" Tab
+-- PS Finder Tab Items
 AddItem(FinderTab, "FINDER 1", "https://luasnapper.xyz/files/loaders/90388b27f7484a8fa16e70dd9030bf8a.lua", "FINDER")
 AddItem(FinderTab, "FINDER 2", "https://raw.githubusercontent.com/robloxscripts2026/sae-ps/refs/heads/main/lua", "FINDER")
 
--- 4. Nakalagay sa "Shader" Tab
+-- Shader Tab Items
 AddItem(ShaderTab, "PSHADE ULTIMATE", "https://raw.githubusercontent.com/randomstring0/pshade-ultimate/refs/heads/main/src/cd.lua", "GRAPHICS")
 
--- 5. Nakalagay sa "Settings" Tab (Copy Discord & Owner Info)
+-- Settings Tab Items
 local function AddSettingsItem(targetTab, labelText, buttonText, callback)
     local ItemFrame = Instance.new("Frame")
     local ItemCorner = Instance.new("UICorner")
