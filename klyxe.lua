@@ -1,14 +1,19 @@
--- KLYXE HUB | Owner: clyecon
+-- KLYXE HUB | Owner: clyecon (Sidebar Style with Tabs, Shader, PS Finder, Key Tab & Settings)
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local TitleLabel = Instance.new("TextLabel")
 local UICorner = Instance.new("UICorner")
 local UIStroke = Instance.new("UIStroke")
-local ScrollFrame = Instance.new("ScrollingFrame")
-local UIListLayout = Instance.new("UIListLayout")
 local CloseBtn = Instance.new("TextButton")
 local MinimizeBtn = Instance.new("TextButton")
 local isMinimized = false
+
+-- Sidebar Frame (Kaliwa)
+local Sidebar = Instance.new("Frame")
+local SidebarLayout = Instance.new("UIListLayout")
+
+-- Content Container Frame (Kanan)
+local ContentContainer = Instance.new("Frame")
 
 -- Parent Setup
 ScreenGui.Parent = game:GetService("CoreGui") or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
@@ -18,8 +23,8 @@ ScreenGui.Name = "KlyxeHub"
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-MainFrame.Position = UDim2.new(0.5, -175, 0.5, -125)
-MainFrame.Size = UDim2.new(0, 350, 0, 260)
+MainFrame.Position = UDim2.new(0.5, -210, 0.5, -135)
+MainFrame.Size = UDim2.new(0, 420, 0, 270)
 MainFrame.Active = true
 MainFrame.Draggable = true
 
@@ -73,45 +78,106 @@ MinimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 MinimizeBtn.TextSize = 14
 
 local MinCorner = Instance.new("UICorner")
-MinCorner.CornerRadius = UDim.new(1, 0) -- Circle Shape
+MinCorner.CornerRadius = UDim.new(1, 0)
 MinCorner.Parent = MinimizeBtn
 
--- Scroll List Container
-ScrollFrame.Parent = MainFrame
-ScrollFrame.BackgroundTransparency = 1
-ScrollFrame.Position = UDim2.new(0, 10, 0, 38)
-ScrollFrame.Size = UDim2.new(1, -20, 1, -85)
-ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0) -- Automatic na a-update sa baba
-ScrollFrame.ScrollBarThickness = 4
+-- Sidebar Setup (Tabs sa Kaliwa)
+Sidebar.Parent = MainFrame
+Sidebar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Sidebar.Position = UDim2.new(0, 10, 0, 38)
+Sidebar.Size = UDim2.new(0, 110, 1, -75)
+Sidebar.BackgroundTransparency = 0.5
 
-UIListLayout.Parent = ScrollFrame
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.Padding = UDim.new(0, 8)
+local SidebarCorner = Instance.new("UICorner")
+SidebarCorner.CornerRadius = UDim.new(0, 6)
+SidebarCorner.Parent = Sidebar
 
--- Auto update CanvasSize para laging pwedeng i-scroll kahit madagdagan
-UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y + 10)
-end)
+SidebarLayout.Parent = Sidebar
+SidebarLayout.SortOrder = Enum.SortOrder.LayoutOrder
+SidebarLayout.Padding = UDim.new(0, 5)
 
--- Discord Copy Button
+-- Content Container (Kanan)
+ContentContainer.Parent = MainFrame
+ContentContainer.BackgroundTransparency = 1
+ContentContainer.Position = UDim2.new(0, 125, 0, 38)
+ContentContainer.Size = UDim2.new(1, -135, 1, -75)
+
+-- Function para gumawa ng magkaibang Pages/Tabs
+local Pages = {}
+local function CreateTab(tabName)
+    local TabBtn = Instance.new("TextButton")
+    local TabCorner = Instance.new("UICorner")
+    
+    TabBtn.Parent = Sidebar
+    TabBtn.Size = UDim2.new(1, 0, 0, 30)
+    TabBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    TabBtn.Font = Enum.Font.SourceSansBold
+    TabBtn.Text = tabName
+    TabBtn.TextColor3 = Color3.fromRGB(220, 20, 60)
+    TabBtn.TextSize = 11
+    
+    TabCorner.CornerRadius = UDim.new(0, 4)
+    TabCorner.Parent = TabBtn
+
+    local ScrollFrame = Instance.new("ScrollingFrame")
+    local UIListLayout = Instance.new("UIListLayout")
+
+    ScrollFrame.Parent = ContentContainer
+    ScrollFrame.BackgroundTransparency = 1
+    ScrollFrame.Size = UDim2.new(1, 0, 1, 0)
+    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+    ScrollFrame.ScrollBarThickness = 4
+    ScrollFrame.Visible = false
+
+    UIListLayout.Parent = ScrollFrame
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Padding = UDim.new(0, 6)
+
+    UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y + 10)
+    end)
+
+    TabBtn.MouseButton1Click:Connect(function()
+        for _, page in pairs(Pages) do
+            page.Visible = false
+        end
+        ScrollFrame.Visible = true
+    end)
+
+    if #Pages == 0 then
+        ScrollFrame.Visible = true
+    end
+
+    table.insert(Pages, ScrollFrame)
+    return ScrollFrame
+end
+
+-- Gumawa ng mga Tabs (Kasama na ang "Settings" Tab)
+local ScriptsTab = CreateTab("Scripts")
+local KeyTab = CreateTab("Key")
+local FinderTab = CreateTab("PS Finder")
+local ShaderTab = CreateTab("Shader")
+local SettingsTab = CreateTab("Settings")
+
+-- Discord Copy Button sa Baba ng Main Frame
 local DiscButton = Instance.new("TextButton")
 local DiscCorner = Instance.new("UICorner")
 
 DiscButton.Name = "DiscordButton"
 DiscButton.Parent = MainFrame
-DiscButton.Position = UDim2.new(0, 10, 1, -38)
-DiscButton.Size = UDim2.new(1, -20, 0, 30)
+DiscButton.Position = UDim2.new(0, 10, 1, -32)
+DiscButton.Size = UDim2.new(1, -20, 0, 24)
 DiscButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 DiscButton.Font = Enum.Font.SourceSansBold
 DiscButton.Text = "COPY DISCORD LINK"
 DiscButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-DiscButton.TextSize = 12
+DiscButton.TextSize = 11
 
 DiscCorner.CornerRadius = UDim.new(0, 6)
 DiscCorner.Parent = DiscButton
 
 DiscButton.MouseButton1Click:Connect(function()
-    setclipboard("https://discord.gg/wFafRbRpj")
+    setclipboard("https://discord.gg/3bP8an84h")
     DiscButton.Text = "COPIED TO CLIPBOARD!"
     task.wait(2)
     DiscButton.Text = "COPY DISCORD LINK"
@@ -120,17 +186,18 @@ end)
 -- Minimize Functionality
 MinimizeBtn.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
-    ScrollFrame.Visible = not isMinimized
+    Sidebar.Visible = not isMinimized
+    ContentContainer.Visible = not isMinimized
     DiscButton.Visible = not isMinimized
     if isMinimized then
-        MainFrame.Size = UDim2.new(0, 350, 0, 38)
+        MainFrame.Size = UDim2.new(0, 420, 0, 38)
     else
-        MainFrame.Size = UDim2.new(0, 350, 0, 260)
+        MainFrame.Size = UDim2.new(0, 420, 0, 270)
     end
 end)
 
--- Function para sa bawat Script Item
-local function CreateScriptItem(scriptName, scriptUrl)
+-- Function para sa paggawa ng Script Item sa loob ng tab
+local function AddItem(targetTab, scriptName, scriptUrl, badgeText)
     local ItemFrame = Instance.new("Frame")
     local ItemCorner = Instance.new("UICorner")
     local ItemStroke = Instance.new("UIStroke")
@@ -140,9 +207,9 @@ local function CreateScriptItem(scriptName, scriptUrl)
     local ExecButton = Instance.new("TextButton")
     local ExecCorner = Instance.new("UICorner")
 
-    ItemFrame.Size = UDim2.new(1, -10, 0, 45)
+    ItemFrame.Size = UDim2.new(1, -5, 0, 38)
     ItemFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    ItemFrame.Parent = ScrollFrame
+    ItemFrame.Parent = targetTab
 
     ItemCorner.CornerRadius = UDim.new(0, 6)
     ItemCorner.Parent = ItemFrame
@@ -152,39 +219,38 @@ local function CreateScriptItem(scriptName, scriptUrl)
 
     NameLabel.Parent = ItemFrame
     NameLabel.BackgroundTransparency = 1
-    NameLabel.Position = UDim2.new(0, 12, 0, 0)
-    NameLabel.Size = UDim2.new(0.4, 0, 1, 0)
+    NameLabel.Position = UDim2.new(0, 8, 0, 0)
+    NameLabel.Size = UDim2.new(0.35, 0, 1, 0)
     NameLabel.Font = Enum.Font.SourceSansBold
     NameLabel.Text = scriptName
     NameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    NameLabel.TextSize = 13
+    NameLabel.TextSize = 12
     NameLabel.TextXAlignment = Enum.TextXAlignment.Left
 
     StatusBadge.Parent = ItemFrame
-    StatusBadge.Position = UDim2.new(0.45, 0, 0.2, 0)
-    StatusBadge.Size = UDim2.new(0.2, 0, 0.6, 0)
+    StatusBadge.Position = UDim2.new(0.38, 0, 0.2, 0)
+    StatusBadge.Size = UDim2.new(0.25, 0, 0.6, 0)
     StatusBadge.Font = Enum.Font.SourceSansBold
-    StatusBadge.TextSize = 10
-    StatusBadge.Text = "KEYLESS"
-    StatusBadge.TextColor3 = Color3.fromRGB(0, 255, 127)
-    StatusBadge.BackgroundColor3 = Color3.fromRGB(10, 40, 20)
+    StatusBadge.TextSize = 9
+    StatusBadge.Text = badgeText or "WORKING"
+    StatusBadge.TextColor3 = Color3.fromRGB(220, 20, 60)
+    StatusBadge.BackgroundColor3 = Color3.fromRGB(40, 10, 15)
     
     StatusCorner.CornerRadius = UDim.new(0, 4)
     StatusCorner.Parent = StatusBadge
 
     ExecButton.Parent = ItemFrame
-    ExecButton.Position = UDim2.new(0.7, 0, 0.2, 0)
-    ExecButton.Size = UDim2.new(0.26, 0, 0.6, 0)
+    ExecButton.Position = UDim2.new(0.65, 0, 0.2, 0)
+    ExecButton.Size = UDim2.new(0.32, 0, 0.6, 0)
     ExecButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
     ExecButton.Font = Enum.Font.SourceSansBold
     ExecButton.Text = "EXECUTE"
     ExecButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    ExecButton.TextSize = 11
+    ExecButton.TextSize = 10
 
     ExecCorner.CornerRadius = UDim.new(0, 4)
     ExecCorner.Parent = ExecButton
 
-    -- Tatakbo lang kapag pinindot ang EXECUTE button
     ExecButton.MouseButton1Click:Connect(function()
         pcall(function()
             loadstring(game:HttpGet(scriptUrl))()
@@ -192,20 +258,118 @@ local function CreateScriptItem(scriptName, scriptUrl)
     end)
 end
 
--- Listahan ng 16 Scripts
-CreateScriptItem("LKZ", "https://api.luarmor.net/files/v4/loaders/65bf3459d87ba3ac46350e154b640929.lua")
-CreateScriptItem("GLINT", "https://flowauth.net/v1/loaders/6824c37a4078d7d311677732e231edaa.lua")
-CreateScriptItem("LEVON", "https://pastefy.app/nasHhfko/raw")
-CreateScriptItem("PS HOP", "https://raw.githubusercontent.com/GlazeScripts/Private-Server-Finder/refs/heads/main/Glazehub.lua")
-CreateScriptItem("SENA", "https://senahub.xyz/raw/loader")
-CreateScriptItem("FOX", "https://raw.githubusercontent.com/caomod2077/Script/refs/heads/main/Fn-stealanegg.lua")
-CreateScriptItem("BLXY", "https://flowauth.net/v1/loaders/69d3463240384f3a73fbe32c178093a2.lua")
-CreateScriptItem("LENNON V4", "https://api.luarmor.net/files/v4/loaders/4595fe31a5f7a8b4f4dd7071f3119ef7.lua")
-CreateScriptItem("NIGHT HUB", "https://raw.githubusercontent.com/WhiteX1208/Scripts/refs/heads/main/StealEggOnly.luau")
-CreateScriptItem("SAEGRR", "https://raw.githubusercontent.com/swaggayoung581-sudo/SAE-COMMUNITYYYYY/refs/heads/main/SAEGRR_HUB_BLACK_RED_TWO_MENUS_AUTO_STEAL.lua.txt")
-CreateScriptItem("CHILI", "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua")
-CreateScriptItem("DECODE", "https://raw.githubusercontent.com/ItzYumi/Decode/refs/heads/main/DE%3ACODE.lua")
-CreateScriptItem("TSUO", "https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/stealanegg")
-CreateScriptItem("LIMBO", "https://limbohub.my.id/loader.lua")
-CreateScriptItem("MIRANDAV4", "https://raw.githubusercontent.com/miirandahub/loader/refs/heads/main/mirandaafk.lua")
-CreateScriptItem("SHADER", "https://raw.githubusercontent.com/randomstring0/pshade-ultimate/refs/heads/main/src/cd.lua")
+-- 1. Mga nakalagay sa "Scripts" Tab
+AddItem(ScriptsTab, "LKZ", "https://api.luarmor.net/files/v4/loaders/65bf3459d87ba3ac46350e154b640929.lua")
+AddItem(ScriptsTab, "GLINT", "https://flowauth.net/v1/loaders/6824c37a4078d7d311677732e231edaa.lua")
+AddItem(ScriptsTab, "LEVON", "https://pastefy.app/nasHhfko/raw")
+AddItem(ScriptsTab, "SENA", "https://raw.githubusercontent.com/senarblx/sena/refs/heads/main/senav3go")
+AddItem(ScriptsTab, "FOX", "https://raw.githubusercontent.com/caomod2077/Script/refs/heads/main/Fn-stealanegg.lua")
+AddItem(ScriptsTab, "BLXY", "https://flowauth.net/v1/loaders/69d3463240384f3a73fbe32c178093a2.lua")
+AddItem(ScriptsTab, "LENNON V4", "https://api.luarmor.net/files/v4/loaders/4595fe31a5f7a8b4f4dd7071f3119ef7.lua")
+AddItem(ScriptsTab, "NIGHT HUB", "https://raw.githubusercontent.com/WhiteX1208/Scripts/refs/heads/main/StealEggOnly.luau")
+AddItem(ScriptsTab, "SAEGRR", "https://raw.githubusercontent.com/swaggayoung581-sudo/SAE-COMMUNITYYYYY/refs/heads/main/SAEGRR_HUB_BLACK_RED_TWO_MENUS_AUTO_STEAL.lua.txt")
+AddItem(ScriptsTab, "CHILI", "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua")
+AddItem(ScriptsTab, "DECODE", "https://raw.githubusercontent.com/ItzYumi/Decode/refs/heads/main/DE%3ACODE.lua")
+AddItem(ScriptsTab, "TSUO", "https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/stealanegg")
+AddItem(ScriptsTab, "LIMBO", "https://limbohub.my.id/loader.lua")
+AddItem(ScriptsTab, "MIRANDAV4", "https://raw.githubusercontent.com/miirandahub/loader/refs/heads/main/mirandaafk.lua")
+AddItem(ScriptsTab, "KEYLESS", "https://raw.githubusercontent.com/Developer-20261/FreeForALL/refs/heads/main/Keyless")
+AddItem(ScriptsTab, "HORZIN", "https://api.jnkie.com/api/v1/luascripts/public/3db06e0eaa1e4e8bf5e9d3192fa71e0bad2d1d1af5b11c0a58e6b708ad4487f4/download")
+AddItem(ScriptsTab, "NEXORA", "https://raw.githubusercontent.com/Dayvinksthik/Script/refs/heads/main/Games/JoshBNS-Crack.lua")
+AddItem(ScriptsTab, "AEV", "https://vampauth.com/api/projects/2826ec6b-24e6-4392-b3e2-48512923e68c/scripts/aevix")
+AddItem(ScriptsTab, "LEON 1", "https://raw.githubusercontent.com/sabscrip-arch/srver/refs/heads/main/Stealanegg")
+AddItem(ScriptsTab, "JOHNBNS", "https://raw.githubusercontent.com/Developer-20261/FreeForALL/refs/heads/main/Keyless")
+AddItem(ScriptsTab, "VANTA B", "https://raw.githubusercontent.com/tranduykhanh08428-web/VantablackHub/refs/heads/main/Stealanegg.lua.txt")
+AddItem(ScriptsTab, "YODOKU", "https://raw.githubusercontent.com/betdoyvaka/stealanegg/main/Loader.lua")
+AddItem(ScriptsTab, "LEON 2", "https://raw.githubusercontent.com/n01771542-cmd/faluahub/main/main.lua")
+AddItem(ScriptsTab, "VIEL", "https://pastefy.app/jemUHE0u/raw")
+AddItem(ScriptsTab, "CAT HUB", "https://raw.githubusercontent.com/showscript-hub/Script/refs/heads/main/Cat-hub")
+AddItem(ScriptsTab, "NASI RENDANG", "https://raw.githubusercontent.com/JualNasiRendang/loader/refs/heads/main/main.lua")
+AddItem(ScriptsTab, "VOID SHELL", "https://raw.githubusercontent.com/VoidShell-null/VoidShell-Hub/refs/heads/main/Scripts/StealAnEgg.luau")
+AddItem(ScriptsTab, "SOLVEX", "https://raw.githubusercontent.com/Solvexxxx/Scripts/refs/heads/main/SolvexGUI_SAE.lua")
+
+-- 2. Mga nakalagay sa "Key" Tab
+AddItem(KeyTab, "OMG HUB", "https://raw.githubusercontent.com/Omgshit/Scripts/main/MainLoader.lua", "KEY")
+AddItem(KeyTab, "AJJANS", "https://api.luarmor.net/files/v4/loaders/36107afd3107e8d841f9d1a69e2465d4.lua", "KEY")
+AddItem(KeyTab, "ANGRY HUB", "https://gist.githubusercontent.com/angeryy-tvy/6a9ce750ddf5860230196ac468868fdb/raw/Steal-An-Egg-Vxeze", "KEY")
+AddItem(KeyTab, "SNOWY HUB", "https://flowauth.net/v1/ui/a87f00d9adf63658655fcd02aba4ef.lua", "KEY")
+AddItem(KeyTab, "KEXXE", "https://raw.githubusercontent.com/premiumbuddy/kex/refs/heads/main/kexxxx", "KEY")
+AddItem(KeyTab, "FLOW HUB", "https://api.luarmor.net/files/v4/loaders/5946add9ab91f1e04cb005346a8b1968.lua", "KEY")
+AddItem(KeyTab, "ON HUB", "https://raw.githubusercontent.com/davizin713/ONhub/refs/heads/main/script.lua", "KEY")
+AddItem(KeyTab, "SOLIX HUB", "https://raw.githubusercontent.com/bao8jl/solixhub/main/loader", "KEY")
+AddItem(KeyTab, "NEMESIS", "https://raw.githubusercontent.com/x2zu/loader/main/freeloader.lua", "KEY")
+AddItem(KeyTab, "NOVA", "https://raw.githubusercontent.com/NovaHubRBLX/Novahub/refs/heads/main/novahub.lua", "KEY")
+AddItem(KeyTab, "SAIOPS", "https://api.saiops.cc/scripts/Steal-An-Egg-Script.lua", "KEY")
+AddItem(KeyTab, "SCRIPTVERSE", "https://scriptversekey.xyz/s/steal-an-egg", "KEY")
+AddItem(KeyTab, "AIRFLOW", "https://airflowscript.com/loader", "KEY")
+AddItem(KeyTab, "CLOVER", "https://raw.githubusercontent.com/Ryuun0x/Clover/refs/heads/main/main.lua", "KEY")
+AddItem(KeyTab, "FY", "https://FyyCommunity.my.id", "KEY")
+AddItem(KeyTab, "BF", "https://raw.githubusercontent.com/hanniii1/Loader/refs/heads/main/BFLoader.lua", "KEY")
+AddItem(KeyTab, "ZN", "https://zeroinhub.com/api/script", "KEY")
+AddItem(KeyTab, "SPEED HUB", "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", "KEY")
+
+-- 3. Mga nakalagay sa "PS Finder" Tab
+AddItem(FinderTab, "FINDER 1", "https://luasnapper.xyz/files/loaders/90388b27f7484a8fa16e70dd9030bf8a.lua", "FINDER")
+AddItem(FinderTab, "FINDER 2", "https://raw.githubusercontent.com/robloxscripts2026/sae-ps/refs/heads/main/lua", "FINDER")
+
+-- 4. Nakalagay sa "Shader" Tab
+AddItem(ShaderTab, "PSHADE ULTIMATE", "https://raw.githubusercontent.com/randomstring0/pshade-ultimate/refs/heads/main/src/cd.lua", "GRAPHICS")
+
+-- 5. Nakalagay sa "Settings" Tab (Copy Discord & Owner Info)
+local function AddSettingsItem(targetTab, labelText, buttonText, callback)
+    local ItemFrame = Instance.new("Frame")
+    local ItemCorner = Instance.new("UICorner")
+    local ItemStroke = Instance.new("UIStroke")
+    local NameLabel = Instance.new("TextLabel")
+    local ExecButton = Instance.new("TextButton")
+    local ExecCorner = Instance.new("UICorner")
+
+    ItemFrame.Size = UDim2.new(1, -5, 0, 38)
+    ItemFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    ItemFrame.Parent = targetTab
+
+    ItemCorner.CornerRadius = UDim.new(0, 6)
+    ItemCorner.Parent = ItemFrame
+
+    ItemStroke.Parent = ItemFrame
+    ItemStroke.Color = Color3.fromRGB(45, 45, 45)
+
+    NameLabel.Parent = ItemFrame
+    NameLabel.BackgroundTransparency = 1
+    NameLabel.Position = UDim2.new(0, 8, 0, 0)
+    NameLabel.Size = UDim2.new(0.55, 0, 1, 0)
+    NameLabel.Font = Enum.Font.SourceSansBold
+    NameLabel.Text = labelText
+    NameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    NameLabel.TextSize = 11
+    NameLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+    ExecButton.Parent = ItemFrame
+    ExecButton.Position = UDim2.new(0.58, 0, 0.2, 0)
+    ExecButton.Size = UDim2.new(0.39, 0, 0.6, 0)
+    ExecButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+    ExecButton.Font = Enum.Font.SourceSansBold
+    ExecButton.Text = buttonText
+    ExecButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ExecButton.TextSize = 10
+
+    ExecCorner.CornerRadius = UDim.new(0, 4)
+    ExecCorner.Parent = ExecButton
+
+    ExecButton.MouseButton1Click:Connect(function()
+        callback(ExecButton)
+    end)
+end
+
+AddSettingsItem(SettingsTab, "Owner: clyecon", "INFO", function(btn)
+    btn.Text = "OWNER: CLYECON"
+    task.wait(2)
+    btn.Text = "INFO"
+end)
+
+AddSettingsItem(SettingsTab, "Discord: https://discord.gg/3bP8an84h", "COPY DISCORD", function(btn)
+    setclipboard("https://discord.gg/3bP8an84h")
+    btn.Text = "COPIED!"
+    task.wait(2)
+    btn.Text = "COPY DISCORD"
+end)
