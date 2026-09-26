@@ -1,10 +1,10 @@
--- KLYXE HUB | Owner: clyecon (Loading Screen, Minimize to Small Box, Sidebar Tabs)
+-- KLYXE HUB | Owner: clyecon (Loading Screen, Minimize to Small Box, Animations Tab & All Scripts)
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- 1. Loading Screen (Lalabas muna ng mga 5 segundo)
+-- 1. Loading Screen (Lalabas muna ng mga 5 segundo)[cite: 3]
 local LoadGui = Instance.new("ScreenGui")
 LoadGui.Parent = CoreGui or PlayerGui
 LoadGui.Name = "KlyxeLoading"
@@ -26,13 +26,12 @@ LoadStroke.Parent = LoadFrame
 LoadStroke.Color = Color3.fromRGB(220, 20, 60)
 LoadStroke.Thickness = 2
 
--- Logo Image sa Loading Screen (Galing sa ibinigay mong larawan)
 local LogoImage = Instance.new("ImageLabel")
 LogoImage.Parent = LoadFrame
 LogoImage.BackgroundTransparency = 1
 LogoImage.Position = UDim2.new(0.5, -75, 0.15, 0)
 LogoImage.Size = UDim2.new(0, 150, 0, 70)
-LogoImage.Image = "rbxassetid://18512314545" -- Default placeholder asset id para sa logo
+LogoImage.Image = "rbxassetid://18512314545"
 LogoImage.ScaleType = Enum.ScaleType.Fit
 
 local LoadText = Instance.new("TextLabel")
@@ -64,7 +63,6 @@ local BarFillCorner = Instance.new("UICorner")
 BarFillCorner.CornerRadius = UDim.new(1, 0)
 BarFillCorner.Parent = BarFill
 
--- Progress animation para sa 5 seconds
 local tweenService = game:GetService("TweenService")
 tweenService:Create(BarFill, TweenInfo.new(5, Enum.EasingStyle.Linear), {Size = UDim2.new(1, 0, 1, 0)}):Play()
 
@@ -253,6 +251,8 @@ local ScriptsTab = CreateTab("Scripts")
 local KeyTab = CreateTab("Key")
 local FinderTab = CreateTab("PS Finder")
 local ShaderTab = CreateTab("Shader")
+local AnimTab = CreateTab("Animations")
+local MusicTab = CreateTab("Music")
 local SettingsTab = CreateTab("Settings")
 
 -- Discord Copy Button sa Baba ng Main Frame
@@ -279,7 +279,7 @@ DiscButton.MouseButton1Click:Connect(function()
     DiscButton.Text = "COPY DISCORD LINK"
 end)
 
--- Minimize & Unminimize Logic (Magiging maliit na box)
+-- Minimize & Unminimize Logic
 local function ToggleMinimize()
     isMinimized = not isMinimized
     MainFrame.Visible = not isMinimized
@@ -355,7 +355,7 @@ end
 AddItem(ScriptsTab, "LKZ", "https://api.luarmor.net/files/v4/loaders/65bf3459d87ba3ac46350e154b640929.lua")
 AddItem(ScriptsTab, "GLINT", "https://flowauth.net/v1/loaders/6824c37a4078d7d311677732e231edaa.lua")
 AddItem(ScriptsTab, "LEVON", "https://pastefy.app/nasHhfko/raw")
-AddItem(ScriptsTab, "SENA", "https://senahub.xyz/raw/loader")
+AddItem(ScriptsTab, "SENA", "https://raw.githubusercontent.com/senarblx/sena/refs/heads/main/senav3go")
 AddItem(ScriptsTab, "FOX", "https://raw.githubusercontent.com/caomod2077/Script/refs/heads/main/Fn-stealanegg.lua")
 AddItem(ScriptsTab, "BLXY", "https://flowauth.net/v1/loaders/69d3463240384f3a73fbe32c178093a2.lua")
 AddItem(ScriptsTab, "LENNON V4", "https://api.luarmor.net/files/v4/loaders/4595fe31a5f7a8b4f4dd7071f3119ef7.lua")
@@ -407,6 +407,14 @@ AddItem(FinderTab, "FINDER 2", "https://raw.githubusercontent.com/robloxscripts2
 
 -- Shader Tab Items
 AddItem(ShaderTab, "PSHADE ULTIMATE", "https://raw.githubusercontent.com/randomstring0/pshade-ultimate/refs/heads/main/src/cd.lua", "GRAPHICS")
+
+-- Animations Tab Items (Kumpleto na ang tatlo)
+AddItem(AnimTab, "ANIMATION 1", "https://pastefy.app/DcAGSub7/raw", "ANIM")
+AddItem(AnimTab, "ANIMATION 2", "https://pastebin.com/raw/cr20JxP9", "ANIM")
+AddItem(AnimTab, "ANIMATION 3", "https://pastebin.com/raw/U1yYFq22", "ANIM")
+
+-- Music Tab Items (YouTube Music Player V8.5)
+AddItem(MusicTab, "YT MUSIC V8.5", "https://raw.githubusercontent.com/iimate/ytmusic/refs/heads/main/loader.lua", "MUSIC")
 
 -- Settings Tab Items
 local function AddSettingsItem(targetTab, labelText, buttonText, callback)
