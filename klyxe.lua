@@ -81,12 +81,17 @@ ScrollFrame.Parent = MainFrame
 ScrollFrame.BackgroundTransparency = 1
 ScrollFrame.Position = UDim2.new(0, 10, 0, 38)
 ScrollFrame.Size = UDim2.new(1, -20, 1, -85)
-ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 650)
+ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0) -- Automatic na a-update sa baba
 ScrollFrame.ScrollBarThickness = 4
 
 UIListLayout.Parent = ScrollFrame
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Padding = UDim.new(0, 8)
+
+-- Auto update CanvasSize para laging pwedeng i-scroll kahit madagdagan
+UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y + 10)
+end)
 
 -- Discord Copy Button
 local DiscButton = Instance.new("TextButton")
@@ -187,7 +192,7 @@ local function CreateScriptItem(scriptName, scriptUrl)
     end)
 end
 
--- Listahan ng 15 Scripts (Naka-hold, tatakbo lang pag pinindot ang button)
+-- Listahan ng 15 Scripts
 CreateScriptItem("LKZ", "https://api.luarmor.net/files/v4/loaders/65bf3459d87ba3ac46350e154b640929.lua")
 CreateScriptItem("GLINT", "https://flowauth.net/v1/loaders/6824c37a4078d7d311677732e231edaa.lua")
 CreateScriptItem("LEVON", "https://pastefy.app/nasHhfko/raw")
@@ -203,4 +208,3 @@ CreateScriptItem("DECODE", "https://raw.githubusercontent.com/ItzYumi/Decode/ref
 CreateScriptItem("TSUO", "https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/stealanegg")
 CreateScriptItem("LIMBO", "https://limbohub.my.id/loader.lua")
 CreateScriptItem("MIRANDAV4", "https://raw.githubusercontent.com/miirandahub/loader/refs/heads/main/mirandaafk.lua")
-
